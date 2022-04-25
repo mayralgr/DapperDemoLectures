@@ -17,15 +17,7 @@ namespace DapperDemo.Repositories
         public Company Add(Company company)
         {
             var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode); SELECT CAST(SCOPE_IDENTITY() as int);";
-            var id = db.Query<int>(sql, new
-            {
-                @Name = company.Name,
-                @Address = company.Address,
-                @City = company.City,
-                @State = company.State,
-                @PostalCode = company.PostalCode
-
-            }).Single();
+            var id = db.Query<int>(sql,company).Single();
             company.CompanyID = id;
             return company;
         }
@@ -48,24 +40,16 @@ namespace DapperDemo.Repositories
         public void Remove(int id)
         {
             var sql = "DELETE FROM Companies WHERE CompanyId = @Id";
-            db.Query<Company>(sql, new
+            db.Execute(sql, new
             {
-                @Id = id
+                id
             });
         }
 
         public Company Update(Company company)
         {
             var sql = "UPDATE Companies SET Name = @Name, Address = @Address, City = @City, State = @State, PostalCode = @PostalCode WHERE CompanyId = @CompanyId";
-            db.Query<int>(sql, new
-            {
-                @Name = company.Name,
-                @Address = company.Address,
-                @City = company.City,
-                @State = company.State,
-                @PostalCode = company.PostalCode,
-                @CompanyId = company.CompanyID
-            });
+            db.Execute(sql,company);
             return company;
         }
     }
