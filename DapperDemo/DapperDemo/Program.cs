@@ -12,6 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(o =>
 //builder.Services.AddScoped<ICompanyRepository, CompanyRepositoryEF>();
 
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

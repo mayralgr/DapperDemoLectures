@@ -18,7 +18,7 @@ namespace DapperDemo.Repositories
         {
             var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode); SELECT CAST(SCOPE_IDENTITY() as int);";
             var id = db.Query<int>(sql,company).Single();
-            company.CompanyID = id;
+            company.CompanyId = id;
             return company;
         }
 

@@ -20,7 +20,7 @@ namespace DapperDemo.Repositories
 
         public Company Find(int id)
         {
-            return _context.Companies.FirstOrDefault(u => u.CompanyID == id);
+            return _context.Companies.FirstOrDefault(u => u.CompanyId == id);
         }
 
         public List<Company> GetAll()
@@ -30,7 +30,7 @@ namespace DapperDemo.Repositories
 
         public void Remove(int id)
         {
-            Company company = _context.Companies.FirstOrDefault(u => u.CompanyID == id);
+            Company company = _context.Companies.FirstOrDefault(u => u.CompanyId == id);
             if (company != null)
             {
                 _context.Companies.Remove(company);

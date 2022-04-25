@@ -55,8 +55,9 @@ namespace DapperDemo.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CompanyID,Name,Address,City,State,PostalCode")] Company company)
+        public async Task<IActionResult> Create([Bind("CompanyId,Name,Address,City,State,PostalCode")] Company company)
         {
+            ModelState.Remove("Employees");
             if (ModelState.IsValid)
             {
                 companyRepository.Add(company);
@@ -86,13 +87,13 @@ namespace DapperDemo.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CompanyID,Name,Address,City,State,PostalCode")] Company company)
+        public async Task<IActionResult> Edit(int id, [Bind("CompanyId,Name,Address,City,State,PostalCode")] Company company)
         {
-            if (id != company.CompanyID)
+            if (id != company.CompanyId)
             {
                 return NotFound();
             }
-
+            ModelState.Remove("Employees");
             if (ModelState.IsValid)
             {
                 try
