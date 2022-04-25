@@ -1,4 +1,5 @@
 using DapperDemo.DbContexts;
+using DapperDemo.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
     o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+builder.Services.AddScoped<ICompanyRepository, CompanyRepositoryEF>();
+
+//builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

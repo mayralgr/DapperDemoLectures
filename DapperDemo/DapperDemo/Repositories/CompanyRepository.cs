@@ -1,47 +1,71 @@
-﻿using DapperDemo.DbContexts;
+﻿using Dapper;
+using DapperDemo.DbContexts;
 using DapperDemo.Models;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace DapperDemo.Repositories
 {
     public class CompanyRepository : ICompanyRepository
     {
-        private readonly ApplicationDbContext _context;
+        private IDbConnection db;
 
-        public CompanyRepository(ApplicationDbContext context)
+        public CompanyRepository(IConfiguration configuration)
         {
-            _context = context;
+            this.db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
         public Company Add(Company company)
         {
-            _context.Companies.Add(company);
-            _context.SaveChanges();
+            var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode); SELECT CAST(SCOPE_IDENTITY() as int);";
+            var id = db.Query<int>(sql, new
+            {
+                @Name = company.Name,
+                @Address = company.Address,
+                @City = company.City,
+                @State = company.State,
+                @PostalCode = company.PostalCode
+
+            }).Single();
+            company.CompanyID = id;
             return company;
         }
 
         public Company Find(int id)
         {
-            return _context.Companies.FirstOrDefault(u => u.CompanyID == id);
+            var sql = "SELECT * FROM Companies WHERE CompanyId = @Id";
+            return db.Query<Company>(sql, new
+            {
+                @Id = id
+            }).Single();
         }
 
         public List<Company> GetAll()
         {
-            return _context.Companies.ToList();
+            var sql = "SELECT * FROM Companies";
+            return db.Query <Company> (sql).ToList();
         }
 
         public void Remove(int id)
         {
-            Company company = _context.Companies.FirstOrDefault(u => u.CompanyID == id);
-            if (company != null)
+            var sql = "DELETE FROM Companies WHERE CompanyId = @Id";
+            db.Query<Company>(sql, new
             {
-                _context.Companies.Remove(company);
-                _context.SaveChanges();
-            }
+                @Id = id
+            });
         }
 
         public Company Update(Company company)
         {
-            _context.Companies.Update(company);
-            _context.SaveChanges();
+            var sql = "UPDATE Companies SET Name = @Name, Address = @Address, City = @City, State = @State, PostalCode = @PostalCode WHERE CompanyId = @CompanyId";
+            db.Query<int>(sql, new
+            {
+                @Name = company.Name,
+                @Address = company.Address,
+                @City = company.City,
+                @State = company.State,
+                @PostalCode = company.PostalCode,
+                @CompanyId = company.CompanyID
+            });
             return company;
         }
     }
