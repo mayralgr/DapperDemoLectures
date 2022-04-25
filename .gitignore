@@ -36,3 +36,10 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 .cache
+DapperDemo/.vs/DapperDemo/DesignTimeBuild/.dtbcache.v2
+*.v1
+*.v1
+DapperDemo/.vs/DapperDemo/v17/.suo
+DapperDemo/DapperDemo/obj/Debug/net6.0/DapperDemo.assets.cache
+DapperDemo/DapperDemo/obj/Debug/net6.0/DapperDemo.csproj.AssemblyReference.cache
+*.cache
