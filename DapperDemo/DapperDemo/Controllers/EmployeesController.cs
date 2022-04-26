@@ -26,7 +26,12 @@ namespace DapperDemo.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(employeeRepository.GetAll());
+            List<Employee> employees = employeeRepository.GetAll();
+            foreach (var employee in employees)
+            {
+                employee.Company = companyRepository.Find(employee.CompanyId);
+            }
+            return View(employees);
         }
 
         //public async Task<IActionResult> Details(int? id)
