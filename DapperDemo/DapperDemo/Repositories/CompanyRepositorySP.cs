@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DapperDemo.DbContexts;
 using DapperDemo.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;

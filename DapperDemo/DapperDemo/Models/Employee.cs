@@ -1,4 +1,6 @@
-﻿namespace DapperDemo.Models
+﻿using Dapper.Contrib.Extensions;
+
+namespace DapperDemo.Models
 {
     public class Employee
     {
