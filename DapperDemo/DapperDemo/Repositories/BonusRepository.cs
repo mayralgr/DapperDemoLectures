@@ -2,6 +2,7 @@
 using DapperDemo.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Transactions;
 
 namespace DapperDemo.Repositories
 {
@@ -32,7 +33,30 @@ namespace DapperDemo.Repositories
             // batch
             company.Employees.Select(c => { c.CompanyId = company.CompanyId; return c; }).ToList();
             var sq1l = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId); SELECT CAST(SCOPE_IDENTITY() as int);";
-            db.Execute(sq1l, company.Employees);
+            db.Execute(sq1l,company.Employees);
+        }
+
+        public void AddTestCompanyWithEmployeWithTransaction(Company company)
+        {
+            using(var transaction = new TransactionScope())
+            {
+                try
+                {
+                    var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode); SELECT CAST(SCOPE_IDENTITY() as int);";
+                    var id = db.Query<int>(sql, company).Single();
+                    company.CompanyId = id;
+
+
+                    // batch
+                    company.Employees.Select(c => { c.CompanyId = company.CompanyId; return c; }).ToList();
+                    var sq1l = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId); SELECT CAST(SCOPE_IDENTITY() as int);";
+                    db.Execute(sq1l, company.Employees);
+                    transaction.Complete();
+                } catch (Exception ex)
+                {
+                }
+
+            }
         }
 
         public List<Company> FilterCompanyByName(string name)

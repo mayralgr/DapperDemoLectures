@@ -11,6 +11,7 @@ namespace DapperDemo.Repositories
         List<Company> GetAllCompanyWithEmployees();
 
         void AddTestCompanyWithEmploye(Company company);
+        void AddTestCompanyWithEmployeWithTransaction(Company company);
 
         void RemoveRange(int[] companyId);
 
