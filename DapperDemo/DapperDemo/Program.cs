@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(o =>
 builder.Services.AddScoped<ICompanyRepository, CompanyRepositoryContib>();
 builder.Services.AddScoped<IBonusRepository, BonusRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IDapperSprocRepo, DapperSprocRepo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

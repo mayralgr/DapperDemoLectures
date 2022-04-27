@@ -73,7 +73,8 @@ namespace DapperDemo.Controllers
             ModelState.Remove("Company");
             if (ModelState.IsValid)
             {
-                employeeRepository.Add(Employee);
+                //employeeRepository.Add(Employee);
+                await employeeRepository.AddAsync(Employee);
                 return RedirectToAction(nameof(Index));
             }
             return View(Employee);
