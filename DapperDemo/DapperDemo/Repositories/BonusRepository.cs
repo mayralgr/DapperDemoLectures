@@ -30,6 +30,14 @@ namespace DapperDemo.Repositories
             }
         }
 
+        public List<Company> FilterCompanyByName(string name)
+        {
+            return db.Query<Company>("SELECT * FROM Companies WHERE Name like '%' + @name + '%'", new
+            {
+                name
+            }).ToList();
+        }
+
         public List<Company> GetAllCompanyWithEmployees()
         {
             var sql = "SELECT C.*,E.* FROM Employees AS E INNER JOIN Companies AS C ON E.CompanyId = C.CompanyId ";
@@ -82,6 +90,15 @@ namespace DapperDemo.Repositories
                 return employee;
             }, new { Id = companyId }, splitOn: "CompanyId");
             return employee.ToList();
+        }
+
+        public void RemoveRange(int[] companyId)
+        {
+            var sql = "DELETE FROM Companies WHERE CompanyId IN @Ids";
+            db.Execute(sql, new
+            {
+                Ids = companyId
+            });
         }
     }
 }
