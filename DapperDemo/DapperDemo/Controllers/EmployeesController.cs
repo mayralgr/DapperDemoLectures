@@ -26,14 +26,14 @@ namespace DapperDemo.Controllers
             bonusRepository = bonusRepo;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int companyId = 0)
         {
             //List<Employee> employees = employeeRepository.GetAll();
             //foreach (var employee in employees)
             //{
             //    employee.Company = companyRepository.Find(employee.CompanyId);
             //}
-            List<Employee> employees = bonusRepository.GetEmployeeWithCompany();
+            List<Employee> employees = bonusRepository.GetEmployeeWithCompany(companyId);
             return View(employees);
         }
 
