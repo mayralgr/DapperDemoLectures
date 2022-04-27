@@ -14,6 +14,22 @@ namespace DapperDemo.Repositories
             this.db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
+        public void AddTestCompanyWithEmploye(Company company)
+        {
+            var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode); SELECT CAST(SCOPE_IDENTITY() as int);";
+            var id = db.Query<int>(sql, company).Single();
+            company.CompanyId = id;
+
+            // employees
+            foreach(var employee in company.Employees)
+            {
+                employee.CompanyId = company.CompanyId;
+                var sq1l = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId); SELECT CAST(SCOPE_IDENTITY() as int);";
+                var idEmpl = db.Query<int>(sq1l, employee).Single();
+                employee.EmployeeId = idEmpl;
+            }
+        }
+
         public List<Company> GetAllCompanyWithEmployees()
         {
             var sql = "SELECT C.*,E.* FROM Employees AS E INNER JOIN Companies AS C ON E.CompanyId = C.CompanyId ";
@@ -33,6 +49,8 @@ namespace DapperDemo.Repositories
 
             return company.Distinct().ToList();
         }
+
+
 
         public Company GetCompanyWithEmployees(int companyId)
         {
