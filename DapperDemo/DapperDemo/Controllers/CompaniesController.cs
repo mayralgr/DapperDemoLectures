@@ -14,13 +14,16 @@ namespace DapperDemo.Controllers
 {
     public class CompaniesController : Controller
     {
+
+        private readonly IEmployeeRepository employeeRepository;
         private readonly ICompanyRepository companyRepository;
-
-        public CompaniesController(ICompanyRepository repository)
+        private readonly IBonusRepository bonusRepository;
+        public CompaniesController(ICompanyRepository repository, IEmployeeRepository employee, IBonusRepository bonusRepo)
         {
+            employeeRepository = employee;
             companyRepository = repository;
+            bonusRepository = bonusRepo;
         }
-
         // GET: Companies
         public async Task<IActionResult> Index()
         {
@@ -35,7 +38,8 @@ namespace DapperDemo.Controllers
                 return NotFound();
             }
 
-            var company = companyRepository.Find(id.GetValueOrDefault());
+            var company = bonusRepository.GetCompanyWithAddresses(id.GetValueOrDefault());
+                // companyRepository.Find(id.GetValueOrDefault());
             if (company == null)
             {
                 return NotFound();
